@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
-function QuestionForm(props) {
+function QuestionForm({updateQuestionList}) {
+
   const [formData, setFormData] = useState({
     prompt: "",
     answer1: "",
@@ -18,8 +19,49 @@ function QuestionForm(props) {
   }
 
   function handleSubmit(event) {
+    //Basically, handleSubmit posts the form Data onto the server
+    //and then sends a get request for the updated questions.
+    //The last item in the response from the get request is then passed into
+    //the updateQuestionList function. This function is declared in the App component.
+    //It adds the last question to the lis on the DOM.
+
     event.preventDefault();
-    console.log(formData);
+
+    const answersArray = [
+      formData.answer1,
+      formData.answer2,
+      formData.answer3,
+      formData.answer4
+    ];
+
+    const bodyObj = {
+      prompt: formData.prompt,
+      answers: answersArray,
+      correctIndex: formData.correctIndex
+    }
+
+    const configurationObj = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(bodyObj)
+    }
+ 
+    fetch("http://localhost:4000/questions", configurationObj)
+    
+    fetch("http://localhost:4000/questions")
+    .then(r => r.json())
+    .then(data => {
+      const lastQuestion = data[data.length - 1]
+      updateQuestionList(lastQuestion)
+    })
+
+
+
+
+
+
   }
 
   return (

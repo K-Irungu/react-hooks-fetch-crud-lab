@@ -1,8 +1,6 @@
 import React from "react";
 
 
-
-
 function QuestionList({questionItems}) {
 
   return (

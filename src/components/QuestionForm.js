@@ -12,19 +12,17 @@ function QuestionForm({updateQuestionList}) {
   });
 
   function handleChange(event) {
-    setFormData({
-      ...formData,
-      [event.target.name]: event.target.value,
-    });
+    setFormData({ ...formData, [event.target.name]: event.target.value });
   }
 
-  function handleSubmit(event) {
-    //Basically, handleSubmit posts the form Data onto the server
+  //Deliverable 2.1:
+  //Basically, handleSubmit posts the form Data onto the server
     //and then sends a get request for the updated questions.
-    //The last item in the response from the get request is then passed into
+    //The last item in the response from the get request is then passed as a parameter into
     //the updateQuestionList function. This function is declared in the App component.
-    //It adds the last question to the lis on the DOM.
+    //It adds the last question to the list on the DOM.
 
+  function handleSubmit(event) {
     event.preventDefault();
 
     const answersArray = [
@@ -38,7 +36,7 @@ function QuestionForm({updateQuestionList}) {
       prompt: formData.prompt,
       answers: answersArray,
       correctIndex: formData.correctIndex
-    }
+    };
 
     const configurationObj = {
       method: "POST",
@@ -46,7 +44,7 @@ function QuestionForm({updateQuestionList}) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(bodyObj)
-    }
+    };
  
     fetch("http://localhost:4000/questions", configurationObj)
     
@@ -54,14 +52,7 @@ function QuestionForm({updateQuestionList}) {
     .then(r => r.json())
     .then(data => {
       const lastQuestion = data[data.length - 1]
-      updateQuestionList(lastQuestion)
-    })
-
-
-
-
-
-
+      updateQuestionList(lastQuestion)} )
   }
 
   return (
